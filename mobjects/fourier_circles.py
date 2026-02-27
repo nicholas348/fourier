@@ -137,6 +137,8 @@ class FourierCircles(VGroup):
         self.vector_clock = vector_clock if vector_clock is not None else ValueTracker(0)
         self.vector_type = vector_type
 
+        self._orient_updater = None
+
         self.circles = VGroup()
         self.vectors = VGroup()
 
@@ -175,3 +177,22 @@ class FourierCircles(VGroup):
 
     def get_end(self):
         return self.vectors[-1].get_end()
+
+    def start_orient(self, speed=1.0):
+        if self._orient_updater is not None:
+            try:
+                self.remove_updater(self._orient_updater)
+            except Exception:
+                pass
+
+        def _updater(mob, dt):
+            mob.vector_clock.set_value(mob.vector_clock.get_value() + speed * dt)
+
+        self._orient_updater = _updater
+        self.add_updater(self._orient_updater)
+        return self
+
+    def set_value(self, value):
+        self.vector_clock.set_value(value)
+        self._update_epicycles(self, 0)
+        return self
