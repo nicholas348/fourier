@@ -13,7 +13,7 @@ class FourierCircles(VGroup):
     - Higher-level mobjects like `Text` / `MathTex` (a subpath is automatically selected).
     - Computes Fourier coefficients internally from the input shape (sampling over [0, 1)).
     - Provides animated epicycles (circles + vectors) driven by a built-in `ValueTracker`:
-    - Animate via `epicycles.vector_clock.animate.set_value(...)`.
+    - Animate via `UpdateFromAlphaFunc(..., lambda m, a: m.set_value(...))` or use `start_orient(speed)`.
     - Vector rendering modes:
     - `vector_type="line"` or `vector_type="arrow"`.
     - Size controls:
@@ -160,7 +160,8 @@ class FourierCircles(VGroup):
             self.vectors.add(vec)
 
         self.add(self.circles, self.vectors)
-        self.add_updater(self._update_epicycles)
+        self._epicycles_updater = self._update_epicycles
+        self.add_updater(self._epicycles_updater)
         self._update_epicycles(self, 0)
 
     def _update_epicycles(self, mob, dt=0):
@@ -190,6 +191,12 @@ class FourierCircles(VGroup):
 
         self._orient_updater = _updater
         self.add_updater(self._orient_updater)
+
+        try:
+            self.remove_updater(self._epicycles_updater)
+        except Exception:
+            pass
+        self.add_updater(self._epicycles_updater)
         return self
 
     def set_value(self, value):

@@ -50,7 +50,16 @@ class Demo(Scene):
             vector_type="arrow",
         )
         self.add(epicycles)
-        self.play(epicycles.vector_clock.animate.set_value(2), run_time=10, rate_func=linear)
+        start_t = epicycles.vector_clock.get_value()
+        end_t = 2
+        self.play(
+            UpdateFromAlphaFunc(
+                epicycles,
+                lambda m, a, s=start_t, e=end_t: m.set_value(interpolate(s, e, a)),
+            ),
+            run_time=10,
+            rate_func=linear,
+        )
 ```
 
 ### Accepted input types

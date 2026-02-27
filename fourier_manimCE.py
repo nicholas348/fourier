@@ -1,6 +1,5 @@
 from manim import *
 import numpy as np
-import scipy.integrate
 
 from mobjects.fourier_circles import FourierCircles
 
@@ -109,7 +108,12 @@ class FourierStandardFixed2(Scene):
         self.add(trace)
         self.play(Create(epicycles))
     
-        self.play(epicycles.vector_clock.animate.set_value(2), run_time=30, rate_func=linear)
+        start_t = epicycles.vector_clock.get_value()
+        end_t = 2
+        epicycles.start_orient((end_t - start_t) / 30)
+        self.wait(30)
+        epicycles.start_orient(0)
+        epicycles.set_value(end_t)
         self.wait(2)
 
 
