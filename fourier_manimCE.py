@@ -177,11 +177,11 @@ class PiecewiseExample(Scene):
         self.play(sign_group.animate.to_edge(UP), group.animate.to_edge(UP))
         self.wait(2)
 
-        tex2 = Tex(
-            r"\\operatorname{sgn}(x) = \\frac{4}{\\pi} \\sum_{n=0}^{\\infty} \\frac{\\sin\\big((2n+1)x\\big)}{2n+1}"
+        tex2 = MathTex(
+            r"\operatorname{sgn}(x) = \frac{4}{\pi} \sum_{n=0}^{\infty} \frac{\sin\big((2n+1)x\big)}{2n+1}"
         ).next_to(axes, DOWN, buff=1)
-        tex1 = Tex(
-            r"\\operatorname{sgn}(x) =\\begin{cases}-1, & x < 0 \\0, & x = 0 \\1, & x > 0\\end{cases}"
+        tex1 = MathTex(
+            r"\operatorname{sgn}(x) =\begin{cases}-1, & x < 0 \\0, & x = 0 \\1, & x > 0\end{cases}"
         ).next_to(tex2, RIGHT, buff=1)
         self.play(FadeIn(tex1), FadeIn(tex2))
         self.wait(2)
